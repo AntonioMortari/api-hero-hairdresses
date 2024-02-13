@@ -1,6 +1,6 @@
 import { Users } from '@prisma/client';
 import { prisma } from '../database/prisma';
-import { IUsersCreate, IUsersRepository } from '../interfaces/UsersInterfaces';
+import { IUsersCreate, IUsersRepository, IUsersUpdate } from '../interfaces/UsersInterfaces';
 
 
 class UsersRepository implements IUsersRepository {
@@ -17,6 +17,14 @@ class UsersRepository implements IUsersRepository {
         });
     }
 
+    public async findById(id: string): Promise<Users | null>{
+        return await prisma.users.findUnique({
+            where:{
+                id
+            }
+        });
+    }
+
     public async create({ name, email, password }: IUsersCreate): Promise<string> {
         const user = await prisma.users.create({
             data: {
@@ -27,6 +35,22 @@ class UsersRepository implements IUsersRepository {
         });
 
         return user.id;
+    }
+
+    public async update(
+        id: string,
+        { name, password, avatar_url }: Omit<IUsersUpdate, 'old_password'>
+    ): Promise<void> {
+        await prisma.users.update({
+            where: {
+                id
+            },
+            data: {
+                name,
+                avatar_url,
+                password
+            }
+        });
     }
 
 }

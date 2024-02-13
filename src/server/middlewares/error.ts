@@ -9,6 +9,7 @@ const errorMiddleware = (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     next: NextFunction
 ) => {
+    console.log(error);
 
     const statusCode = error.statusCode || 500;
     const message = error.message || 'Internal Server Error';
