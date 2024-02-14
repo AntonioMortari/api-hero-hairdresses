@@ -1,0 +1,41 @@
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from '../../config';
+import { AppError } from '../errors/AppError';
+
+interface IJwtData {
+    id: string;
+}
+
+const sign = (data: IJwtData): string => {
+    if (!JWT_SECRET) {
+        throw new AppError('JWT Secret is missing', 500);
+    }
+
+    const token = jwt.sign(data, JWT_SECRET, {
+        expiresIn: '24h',
+    });
+
+    return token;
+};
+
+const verify = (token: string) => {
+    if (!JWT_SECRET) {
+        throw new AppError('JWT Secret is missing', 500);
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+
+        if(typeof decoded == 'string') return 'INVALID_TOKEN';
+
+        if(typeof decoded.sub == 'string'){
+            return decoded.sub;
+        }
+
+        throw new AppError('Invalid Token', 401);
+    } catch (error) {
+        throw new AppError(`Invalid Token ${error}`, 401);
+    }
+};
+
+export { sign, verify };

@@ -1,6 +1,7 @@
 import { AppError } from '../errors/AppError';
 import { IUsersCreate, IUsersRepository, IUsersUpdate } from '../interfaces/UsersInterfaces';
 import { compare, hash } from '../services/encryptPasswordService';
+import * as jwtService from '../services/jwtService';
 
 
 class UsersProvider{
@@ -47,6 +48,19 @@ class UsersProvider{
             avatar_url,
             password: await hash(password)
         });
+    }
+
+    public async auth(email: string, password: string){
+        const findUser = await this.repository.findByEmail(email);
+        if(!findUser){
+            throw new AppError('Email or password incorrect', 401);
+        }
+
+        if(!await compare(password, findUser.password)){
+            throw new AppError('Email or password incorrect', 401);
+        }
+
+        return jwtService.sign({id: findUser.id});
     }
 }
 

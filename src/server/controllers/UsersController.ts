@@ -47,6 +47,13 @@ class UsersController {
         return res.status(204).send();
     }
 
+    public async auth(req: Request, res: Response){
+        const {email, password} = req.body;
+        const result = await this.provider.auth(email, password);
+
+        return res.status(200).json(result);
+    }
+
 }
 
 export { UsersController };
