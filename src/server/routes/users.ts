@@ -4,6 +4,7 @@ import { UsersProvider } from '../providers/UsersProvider';
 import { UsersController } from '../controllers/UsersController';
 import { upload } from '../middlewares/upload';
 import { isAuthenticated } from '../middlewares/isAuthenticated';
+import { authValidation, editValidation, storeValidation } from '../validations/users';
 
 const router: Router = Router();
 
@@ -15,15 +16,15 @@ router.get('/', isAuthenticated, async (req: Request, res: Response) => {
     await usersController.index(req, res);
 });
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', storeValidation, async (req: Request, res: Response) => {
     await usersController.store(req, res);
 });
 
-router.post('/auth', async (req: Request, res: Response) => {
+router.post('/auth', authValidation, async (req: Request, res: Response) => {
     await usersController.auth(req,res);
 });
 
-router.put('/:id', isAuthenticated, upload.single('file'), async (req: Request, res: Response) => {
+router.put('/:id', editValidation, isAuthenticated, upload.single('file'), async (req: Request, res: Response) => {
     await usersController.edit(req, res);
 });
 

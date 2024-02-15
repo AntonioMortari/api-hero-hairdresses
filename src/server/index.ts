@@ -1,6 +1,7 @@
 import 'express-async-errors';
 import express, { Application } from 'express';
 import { errorMiddleware } from './middlewares/error';
+import {errors} from 'celebrate';
 
 import { usersRoutes } from './routes/users';
 import { schedulesRoutes } from './routes/schedules';
@@ -14,5 +15,6 @@ server.use(express.urlencoded({ extended: true }));
 server.use('/users', usersRoutes);
 server.use('/schedules', schedulesRoutes);
 
+server.use(errors());
 server.use(errorMiddleware);
 export { server };
