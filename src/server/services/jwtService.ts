@@ -3,7 +3,7 @@ import { JWT_SECRET } from '../../config';
 import { AppError } from '../errors/AppError';
 
 interface IJwtData {
-    id: string;
+    sub: string;
 }
 
 const sign = (data: IJwtData): string => {
@@ -25,8 +25,6 @@ const verify = (token: string) => {
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
-
-        if(typeof decoded == 'string') return 'INVALID_TOKEN';
 
         if(typeof decoded.sub == 'string'){
             return decoded.sub;

@@ -15,7 +15,7 @@ router.get('/', isAuthenticated, async (req: Request, res: Response) => {
     await usersController.index(req, res);
 });
 
-router.post('/',isAuthenticated, async (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
     await usersController.store(req, res);
 });
 

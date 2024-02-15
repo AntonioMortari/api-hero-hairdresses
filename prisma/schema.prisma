@@ -10,18 +10,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users{
-  id String @id @default(uuid())
-  email String @unique
-  password String
-  name String
-  avatar_url String @default("")
+model Users {
+  id         String      @id @default(uuid())
+  email      String      @unique
+  password   String
+  name       String
+  avatar_url String      @default("")
+  Schedules  Schedules[]
 }
 
-model Schedules{
-  id String @id @default(uuid())
-  name String
-  phone String
-  email String
-  date DateTime
+model Schedules {
+  id      String   @id @default(uuid())
+  name    String
+  phone   String
+  date    DateTime
+  user_id String
+  users   Users    @relation(fields: [user_id], references: [id])
 }
