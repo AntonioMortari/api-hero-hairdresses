@@ -2,8 +2,6 @@ import { Request, Response } from 'express';
 import { SchedulesProvider } from '../providers/SchedulesProvider';
 import { ISchedulesCreate } from '../interfaces/SchedulesInterfaces';
 
-import { parseISO } from 'date-fns';
-
 class SchedulesController {
 
     private provider: SchedulesProvider;
@@ -15,7 +13,7 @@ class SchedulesController {
     public async index(req: Request, res: Response) {
 
         const { date } = req.query;
-        const parseDate = date ? parseISO(date.toString()) : new Date();
+        const parseDate = date ? new Date(date.toString()) : new Date();
 
         const result = await this.provider.findAll(parseDate);
 
