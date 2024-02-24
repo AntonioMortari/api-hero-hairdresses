@@ -60,7 +60,10 @@ class UsersProvider{
             throw new AppError('Email or password incorrect', 401);
         }
 
-        return jwtService.sign({sub: findUser.id});
+        return {
+            token: jwtService.sign({sub: findUser.id}),
+            user_id: findUser.id
+        };
     }
 }
 
