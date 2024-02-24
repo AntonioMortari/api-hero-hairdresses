@@ -30,9 +30,9 @@ const verify = (token: string) => {
             return decoded.sub;
         }
 
-        throw new AppError('Invalid Token', 401);
+        throw new AppError('Invalid or expired token', 401);
     } catch (error) {
-        throw new AppError(`Invalid Token ${error}`, 401);
+        throw new AppError('Invalid or expired token', 401);
     }
 };
 
