@@ -11,9 +11,17 @@ class UsersController {
         this.provider = provider;
     }
 
-    public async index(req: Request, res: Response){
+    public async index(req: Request, res: Response) {
         // busca todos os usuários
         const result = await this.provider.findAll();
+
+        return res.status(200).json(result);
+    }
+
+    public async show(req: Request, res: Response) {
+        const { id } = req.params;
+
+        const result = await this.provider.findById(id);
 
         return res.status(200).json(result);
     }
@@ -22,18 +30,18 @@ class UsersController {
         // cria um usuário
         const { name, email, password } = req.body;
 
-        const result = await this.provider.create({name, email, password});
+        const result = await this.provider.create({ name, email, password });
 
         return res.status(201).json(result);
     }
 
-    public async edit(req: Request, res: Response){
-        if(!req.file){
+    public async edit(req: Request, res: Response) {
+        if (!req.file) {
             throw new AppError('File is required', 400);
         }
 
-        const {id} = req.params;
-        const { name,password,old_password} = req.body;
+        const { id } = req.params;
+        const { name, password, old_password } = req.body;
 
         console.log(name);
 
@@ -47,11 +55,21 @@ class UsersController {
         return res.status(204).send();
     }
 
-    public async auth(req: Request, res: Response){
-        const {email, password} = req.body;
+    public async auth(req: Request, res: Response) {
+        const { email, password } = req.body;
         const result = await this.provider.auth(email, password);
 
         return res.status(200).json(result);
+    }
+
+    public async refresh(req: Request, res: Response) {
+        const { refresh_token } = req.body;
+
+        const result = await this.provider.refresh(refresh_token);
+
+        return res.status(200).json({
+            token: result
+        });
     }
 
 }

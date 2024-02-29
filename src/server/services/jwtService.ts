@@ -4,6 +4,7 @@ import { AppError } from '../errors/AppError';
 
 interface IJwtData {
     sub: string;
+    expiresIn: string;
 }
 
 const sign = (data: IJwtData): string => {
