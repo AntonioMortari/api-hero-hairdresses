@@ -39,8 +39,8 @@ class UsersProvider {
         });
     }
 
-    public async update(id: string, { name, old_password, password, avatar_url }: IUsersUpdate) {
-        if (!old_password) {
+    public async update(id: string, { name, email, old_password, password, avatar_url }: IUsersUpdate) {
+        if (password && !old_password) {
             throw new AppError('Old password is required', 400);
         }
 
@@ -49,14 +49,22 @@ class UsersProvider {
             throw new AppError(`User with id ${id} not exists`, 400);
         }
 
-        if (!await compare(old_password, findUser.password)) {
+        if (old_password && !await compare(old_password, findUser.password)) {
             throw new AppError('Invalid Credentials', 400);
         }
 
+        if (email) {
+            const findByEmail = await this.repository.findByEmail(email);
+            if (findByEmail && findByEmail.email !== email) {
+                throw new AppError(`User with mail ${email} exists`, 400);
+            }
+        }
+
         await this.repository.update(id, {
-            name,
-            avatar_url,
-            password: await hash(password)
+            name: name || findUser.name,
+            email: email || findUser.email,
+            avatar_url: avatar_url || findUser.avatar_url,
+            password: password ? await hash(password) : findUser.password
         });
     }
 
@@ -72,8 +80,9 @@ class UsersProvider {
 
         return {
             token: jwtService.sign({ sub: findUser.id, expiresIn: '1h' }),
-            refresh_token: jwtService.sign({sub: findUser.id, expiresIn: '7d'}),
+            refresh_token: jwtService.sign({ sub: findUser.id, expiresIn: '7d' }),
             user: {
+                id: findUser.id,
                 name: findUser.name,
                 email: findUser.email
             }
@@ -88,7 +97,7 @@ class UsersProvider {
         const sub = jwtService.verify(refresh_token);
 
 
-        return jwtService.sign({sub, expiresIn: '1h'});
+        return jwtService.sign({ sub, expiresIn: '1h' });
     }
 }
 

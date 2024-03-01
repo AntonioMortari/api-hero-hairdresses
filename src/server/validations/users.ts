@@ -10,12 +10,12 @@ const storeValidation = celebrate({
 
 const editValidation = celebrate({
     [Segments.BODY]: Joi.object().keys({
-        name: Joi.string().required(),
-        password: Joi.string().required().min(3),
-        old_password: Joi.string().required().min(3),
+        name: Joi.string().optional(),
+        password: Joi.string().optional().min(3),
+        old_password: Joi.string().optional().min(3),
         password_confirmation: Joi.string().when('password', {
             is: Joi.exist(),
-            then: Joi.string().required().valid(Joi.ref('password')),
+            then: Joi.string().optional().valid(Joi.ref('password')),
             otherwise: Joi.forbidden()
         })
     }),

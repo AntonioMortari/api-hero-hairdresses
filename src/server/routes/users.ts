@@ -4,7 +4,7 @@ import { UsersProvider } from '../providers/UsersProvider';
 import { UsersController } from '../controllers/UsersController';
 import { upload } from '../middlewares/upload';
 import { isAuthenticated } from '../middlewares/isAuthenticated';
-import { authValidation, editValidation, storeValidation } from '../validations/users';
+import { authValidation, storeValidation } from '../validations/users';
 
 const router: Router = Router();
 
@@ -32,7 +32,7 @@ router.post('/refresh', async(req: Request, res: Response) => {
     await usersController.refresh(req,res);
 });
 
-router.put('/:id', editValidation, isAuthenticated, upload.single('file'), async (req: Request, res: Response) => {
+router.put('/:id', isAuthenticated, upload.single('file'), async (req: Request, res: Response) => {
     await usersController.edit(req, res);
 });
 

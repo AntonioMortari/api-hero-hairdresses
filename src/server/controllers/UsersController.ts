@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { UsersProvider } from '../providers/UsersProvider';
 import { IUsersCreate } from '../interfaces/UsersInterfaces';
-import { AppError } from '../errors/AppError';
 
 class UsersController {
 
@@ -36,20 +35,17 @@ class UsersController {
     }
 
     public async edit(req: Request, res: Response) {
-        if (!req.file) {
-            throw new AppError('File is required', 400);
-        }
+
 
         const { id } = req.params;
-        const { name, password, old_password } = req.body;
-
-        console.log(name);
+        const { name, password, email, old_password } = req.body;
 
         await this.provider.update(id, {
             name,
+            email,
             old_password,
             password,
-            avatar_url: req.file.filename
+            avatar_url: req.file?.filename || '' 
         });
 
         return res.status(204).send();

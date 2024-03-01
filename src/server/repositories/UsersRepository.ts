@@ -17,9 +17,9 @@ class UsersRepository implements IUsersRepository {
         });
     }
 
-    public async findById(id: string): Promise<Users | null>{
+    public async findById(id: string): Promise<Users | null> {
         return await prisma.users.findUnique({
-            where:{
+            where: {
                 id
             }
         });
@@ -39,7 +39,7 @@ class UsersRepository implements IUsersRepository {
 
     public async update(
         id: string,
-        { name, password, avatar_url }: Omit<IUsersUpdate, 'old_password'>
+        { name, password, email, avatar_url }: Omit<IUsersUpdate, 'old_password'>
     ): Promise<void> {
         await prisma.users.update({
             where: {
@@ -47,8 +47,9 @@ class UsersRepository implements IUsersRepository {
             },
             data: {
                 name,
-                avatar_url,
-                password
+                email,
+                password,
+                avatar_url
             }
         });
     }
