@@ -27,8 +27,6 @@ Para rodar o projeto localmente você precisa do Nodejs instalado em sua máquin
 
 <h3>Clone o repositório</h3>
 
-How to clone your project
-
 ```bash
 git clone https://github.com/AntonioMortari/api-hero-hairdresses.git
 ```
