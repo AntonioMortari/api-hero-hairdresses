@@ -85,7 +85,7 @@ User {
 
 **Schedule**
 <pre>
-User {
+Schedule {
   id: string;
   name: string;
   phone: string;
